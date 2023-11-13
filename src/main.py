@@ -10,7 +10,7 @@ from exceptions.YaExiste import YaExiste
 
 class Programa:
     def __init__(self):
-        self.equipos = {}
+        self.equipos = {} 
         self.empleados = {}
 
     def alta_empleado():
@@ -63,7 +63,7 @@ class Programa:
         return auto
 
     def buscar_auto():
-        pass
+        print('Hola')
 
     def alta_equipo():
         pass
