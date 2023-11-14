@@ -1,11 +1,12 @@
 
 
 class Equipo():
-    def __init__(self, nombre_equipo, piloto, director_de_equipo, mecanico):
+    def __init__(self, nombre_equipo, piloto, director_de_equipo, mecanico, auto):
         self._nombre_equipo = nombre_equipo
-        self._piloto = piloto
-        self._director_de_equipo = director_de_equipo
-        self._mecanico = mecanico
+        self._pilotos = piloto
+        self._director_de_equipos = director_de_equipo
+        self._mecanicos = mecanico
+        self._auto = auto
 
     @property
     def get_nombre_equipo(self):

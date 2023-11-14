@@ -18,7 +18,10 @@ def main_menu():
         print("4. Simular carrera")
         print("5. Realizar consultas")
         print("6. Finalizar programa")
-        opcion = int(input("Ingrese la opción deseada: "))
+        try:
+            opcion = int(input("Ingrese la opción deseada: "))
+        except:
+            print('Ingrese una opcion válida')
         if opcion == 1:
             alta_empleado()
         elif opcion == 2:
@@ -63,19 +66,19 @@ def alta_empleado():
         else:
             salario = float(salario)
         
-        cargo = input("Ingrese cargo (1 Piloto, 2 Piloto de reserva, 3 Mecánico, 4 Jefe de equipo): ")
+        cargo = int(input("Ingrese cargo (1 Piloto, 2 Piloto de reserva, 3 Mecánico, 4 Jefe de equipo): "))
         if cargo > 4:
             raise DatosInvalidos()
         empleado = None
 
-        if cargo == '1' or cargo == '2':  # Piloto o Piloto de reserva
+        if cargo == 1 or cargo == 2:  # Piloto o Piloto de reserva
             score = int(input("Ingrese score: "))
             numero_auto = int(input("Ingrese número de auto: "))
             empleado = Piloto(id_empleado, nombre, nacionalidad, salario, fecha_nacimiento,score, numero_auto)
-        elif cargo == '3':  # Mecánico
+        elif cargo == 3:  # Mecánico
             score = int(input("Ingrese score: "))
             empleado = Mecanico(id_empleado, nombre, fecha_nacimiento, nacionalidad, salario, score)
-        elif cargo == '4':  # Jefe de equipo
+        elif cargo == 4:  # Jefe de equipo
             empleado = DirectorEquipo(id_empleado, nombre, fecha_nacimiento, salario, nacionalidad)
         return empleado
     except DatosInvalidos():
@@ -97,12 +100,13 @@ def buscar_auto(modelo_auto):
             print('El modelo ingresado no existe')
 
 def buscar_empleado(cedula):
+    empleado_ = None  
     for empleado in empleados_main:
         if empleado.id == cedula:
-            empleado_ = empleados_main.id
-        else:
-            print('El modelo ingresado no existe')
-        
+            empleado_ = empleado
+            break  
+    if empleado_ is None:
+        print('El empleado con la cédula ingresada no existe')
     return empleado_
 
     
@@ -116,8 +120,8 @@ def alta_equipo():
     nombre_equipo = input('Ingrese nombre del equipo: ')
     modelo_auto = input('Ingrese modelo de auto:  ')
     auto = buscar_auto(modelo_auto)
-    
-    for i in range(11):
+    i=1
+    while i <=12:
         cedula = int(input('Ingrese cedula del empleado: '))
         empleado = buscar_empleado(cedula)
         if isinstance(empleado,Piloto) and not dato_invalido: 
@@ -128,10 +132,12 @@ def alta_equipo():
             mecanicos.append(empleado)
         else:
             dato_invalido = True
+        i=+1
     
     equipo = Equipo(nombre_equipo, pilotos, director_equipo, mecanicos, auto)
     equipos_main.append(equipo)
-    return equipo
+    
+    
 
 
 
