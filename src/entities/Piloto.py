@@ -2,12 +2,14 @@ from entities.Empleado import Empleado
 
 class Piloto(Empleado):
 
-    def __init__(self, id, nombre, nacionalidad, salario, fecha_nacimiento,score, numero_auto, puntaje_campeonato=0, lesion=False):
+    def __init__(self, id, nombre, nacionalidad, salario, fecha_nacimiento, score, 
+                 numero_auto, reserva):
         super().__init__(id, nombre, nacionalidad, salario, fecha_nacimiento)
         self._score = score ##Setter    
-        self._lesion = lesion ##Setter
+        self._lesion = False ##Setter
         self._numero_auto = numero_auto
-        self._puntaje_campeonato = puntaje_campeonato
+        self._puntaje_campeonato = 0 #setter
+        self._reserva = reserva #setter
 
 
     #Getters

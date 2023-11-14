@@ -1,10 +1,9 @@
 from entities.DirectorEquipo import DirectorEquipo
 from entities.Mecanico import Mecanico
 from entities.Piloto import Piloto
-
 from entities.Auto import Auto
-from Carrera import Carrera
 
+from Carrera import Carrera
 from excepciones.DatosInvalidos import DatosInvalidos
 from excepciones.YaExiste import YaExiste
 
@@ -48,7 +47,11 @@ def alta_empleado():
         if cargo == 1 or cargo == 2:  # Piloto o Piloto de reserva
             score = int(input("Ingrese score: "))
             numero_auto = int(input("Ingrese número de auto: "))
-            empleado = Piloto(id_empleado, nombre, nacionalidad, salario, fecha_nacimiento, score, numero_auto)
+            if cargo == 1:
+                empleado = Piloto(id_empleado, nombre, nacionalidad, salario, fecha_nacimiento, score, numero_auto, reserva=False)
+            else:
+                empleado = Piloto(id_empleado, nombre, nacionalidad, salario, 
+                                  fecha_nacimiento, score, numero_auto, reserva=True)
         elif cargo == 3:  # Mecánico
             score = int(input("Ingrese score: "))
             empleado = Mecanico(id_empleado, nombre, fecha_nacimiento, nacionalidad, salario, score)
@@ -57,6 +60,7 @@ def alta_empleado():
 
         
         print('Tarea completada con éxito!\n')
+        empleados.append(empleado)
 
         return empleado
     except DatosInvalidos():
@@ -71,7 +75,7 @@ def alta_auto():
     return auto
 
 def buscar_auto():
-    modelo = input("Ingrese Matricula")
+    modelo = input("Ingrese Matricula: ")
     for auto in autos:
         if auto.modelo == modelo:
             print(auto.modelo)
@@ -81,8 +85,27 @@ def buscar_auto():
 def alta_equipo():
     pass
 
-def simular_carrera():
+
+def lista_desde_str(cadena):
     pass
+
+
+def simular_carrera():
+    
+
+    pilotos_lesionados = input("Ingrese nro de todos pilotos lesionados (enter si no hay): ")
+    pilotos_abandono = input("Ingrese nro de todos pilotos que abandonan (enter si no hay): ")
+    pilotos_error_pits = input("Ingrese nro de todos pilotos con error en pits (enter si no hay): ")
+    pilotos_penalidad = input("Ingrese nro de todos pilotos con penalidad (enter si no hay): ")
+
+    
+    
+    carrera = Carrera(pilotos, pilotos_lesionados, pilotos_abandono, pilotos_error_pits, pilotos_penalidad)
+    simulacion = carrera.simular()
+
+    return simulacion
+
+
 
 def realizar_consultas():
     pass
@@ -119,5 +142,6 @@ if __name__=='__main__':
     
     main_menu()
 
-    #git commit --no-verify
-    #git pull origin master
+    print('Equipos:', equipos)
+    print('Empleados:', empleados)
+    print('Autos:', autos)
