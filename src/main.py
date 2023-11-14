@@ -5,8 +5,8 @@ from entities.Piloto import Piloto
 from entities.Auto import Auto
 from Carrera import Carrera
 
-from exceptions.DatosInvalidos import DatosInvalidos
-from exceptions.YaExiste import YaExiste
+from excepciones.DatosInvalidos import DatosInvalidos
+from excepciones.YaExiste import YaExiste
 
 
 equipos = {} 
@@ -40,20 +40,23 @@ def alta_empleado():
         else:
             salario = float(salario)
         
-        cargo = input("Ingrese cargo (1 Piloto, 2 Piloto de reserva, 3 Mecánico, 4 Jefe de equipo): ")
+        cargo = int(input("Ingrese cargo (1 Piloto, 2 Piloto de reserva, 3 Mecánico, 4 Jefe de equipo): "))
         if cargo > 4:
             raise DatosInvalidos()
         empleado = None
 
-        if cargo == '1' or cargo == '2':  # Piloto o Piloto de reserva
+        if cargo == 1 or cargo == 2:  # Piloto o Piloto de reserva
             score = int(input("Ingrese score: "))
             numero_auto = int(input("Ingrese número de auto: "))
-            empleado = Piloto(id_empleado, nombre, nacionalidad, salario, fecha_nacimiento,score, numero_auto)
-        elif cargo == '3':  # Mecánico
+            empleado = Piloto(id_empleado, nombre, nacionalidad, salario, fecha_nacimiento, score, numero_auto)
+        elif cargo == 3:  # Mecánico
             score = int(input("Ingrese score: "))
             empleado = Mecanico(id_empleado, nombre, fecha_nacimiento, nacionalidad, salario, score)
-        elif cargo == '4':  # Jefe de equipo
+        elif cargo == 4:  # Jefe de equipo
             empleado = DirectorEquipo(id_empleado, nombre, fecha_nacimiento, salario, nacionalidad)
+
+        
+        print('Tarea completada con éxito!\n')
 
         return empleado
     except DatosInvalidos():
@@ -86,6 +89,7 @@ def realizar_consultas():
 
 
 def main_menu():
+    print('**** MENÚ PRINCIPAL ****')
     while True:
         print("1. Alta de empleado")
         print("2. Alta de auto")
