@@ -51,10 +51,11 @@ def alta_empleado():
     try:
         id_empleado = input("Ingrese ID: ")
         if len(str(id_empleado)) >= 8:
-            main_menu()
             raise DatosInvalidos()
+        
         if buscar_empleado(id_empleado) is not None:
             raise YaExiste()
+        
         nombre = input("Ingrese nombre: ")
         if not nombre.isalpha():
             raise DatosInvalidos()
@@ -158,10 +159,10 @@ def top_diez(empleados_main):
         print(f"Piloto: {piloto.nombre}, Puntos: {piloto.puntaje_campeonato}")
 
 def resumen_equipos():
-    equipo = [equipo for equipo in equipos_main if isinstance(equipo, Equipo)]
+    equipos = [equipo for equipo in equipos_main if isinstance(equipo, Equipo)]
     i=1
-    for team in equipo:
-        print(f"Equipo {i}: {team.get_nombre_equipo}")
+    for equipo in equipos:
+        print(f"Equipo {i}: {equipo.get_nombre_equipo}")
         i+=1
 
 def top_cinco_salarios_pilotos():
@@ -179,9 +180,10 @@ def top_tres_score_pilotos():
         print(f"Piloto: {piloto.nombre}, Puntos: {piloto.score}")
 
 def jefes_de_equipo():
-    jefes = [jefe for jefe in empleados_main if isinstance(jefe, DirectorEquipo)]
-    for jefe in jefes:
-        print(f"Jefe de Equipo: {jefe.nombre}")
+    jefes = [(equipo.get_nombre_equipo, equipo.get_director_de_equipo.nombre) for equipo in equipos_main if isinstance(equipo, Equipo)]
+    jefes = sorted(jefes, key=lambda jefe: jefe[1])
+    for (nombre_equipo, director_equipo) in jefes:
+        print(f"Jefe de Equipo: {director_equipo}. Equipo: {nombre_equipo}")
 
 
 def realizar_consultas():
@@ -212,8 +214,6 @@ def realizar_consultas():
     else:
         return main_menu()
     
-    
-
 
 
 
