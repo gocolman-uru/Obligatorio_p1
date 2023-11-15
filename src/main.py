@@ -87,20 +87,29 @@ def alta_equipo():
 
 
 def lista_desde_str(cadena):
-    pass
+    if len(cadena.strip()) == 0:
+        lista_final = []
+    else:
+        lista_aux = cadena.split(',')
+        lista_final = [x.strip() for x in lista_aux]
+    return lista_final
 
 
 def simular_carrera():
-    
-
     pilotos_lesionados = input("Ingrese nro de todos pilotos lesionados (enter si no hay): ")
     pilotos_abandono = input("Ingrese nro de todos pilotos que abandonan (enter si no hay): ")
     pilotos_error_pits = input("Ingrese nro de todos pilotos con error en pits (enter si no hay): ")
     pilotos_penalidad = input("Ingrese nro de todos pilotos con penalidad (enter si no hay): ")
+    # Los paso a lista
+    lista_pilotos_lesionados = lista_desde_str(pilotos_lesionados)
+    lista_pilotos_abandono = lista_desde_str(pilotos_abandono)
+    lista_pilotos_error_pits = lista_desde_str(pilotos_error_pits)
+    lista_pilotos_penalidad = lista_desde_str(pilotos_penalidad)
 
-    
-    
-    carrera = Carrera(pilotos, pilotos_lesionados, pilotos_abandono, pilotos_error_pits, pilotos_penalidad)
+    print(lista_pilotos_lesionados)
+
+
+    carrera = Carrera(equipos, lista_pilotos_lesionados, lista_pilotos_abandono, lista_pilotos_error_pits, lista_pilotos_penalidad)
     simulacion = carrera.simular()
 
     return simulacion
