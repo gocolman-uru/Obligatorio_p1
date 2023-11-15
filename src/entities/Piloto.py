@@ -8,7 +8,7 @@ class Piloto(Empleado):
         self._lesion = lesion ##Setter
         self._numero_auto = numero_auto
         self._puntaje_campeonato = puntaje_campeonato
-
+    
 
     #Getters
     @property
@@ -20,11 +20,17 @@ class Piloto(Empleado):
         return self._lesion
     
     @property
-    def modelo_auto(self):
-        return self._modelo_auto
-    
-    @property
     def puntaje_campeonato(self):
         return self._puntaje_campeonato
+    
+    @puntaje_campeonato.setter
+    def puntaje_campeonato(self,puntaje_campeonato):
+        self._puntaje_campeonato = puntaje_campeonato
+    
+    @lesion.setter
+    def lesion(self, lesion):
+        self._lesion=lesion
+    
+    
     
     

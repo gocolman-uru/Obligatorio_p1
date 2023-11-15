@@ -14,13 +14,14 @@ class Equipo():
     
     @property
     def get_piloto(self):
-        return self._piloto
+        return self._pilotos
     
     @property
     def get_director_de_equipo(self):
-        return self._director_de_equipo
+        return self._director_de_equipos
     
     @property
     def get_mecanico(self):
-        return self._mecanico
+        return self._mecanicos
+    
 
