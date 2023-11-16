@@ -25,3 +25,6 @@ class Equipo():
         return self._mecanicos
     
 
+    def __str__(self) -> str:
+        return f'Equipo: {self._nombre_equipo}, pilotos {self._pilotos}, director de equipo {self._director_de_equipos}, mecanicos {self._mecanicos}, auto {self._auto}]'
+

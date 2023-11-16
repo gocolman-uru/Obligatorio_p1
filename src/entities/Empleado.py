@@ -35,6 +35,10 @@ class Empleado(ABC):
     @property
     def fecha_nacimiento(self):
         return self._fecha_nacimiento
+    
+
+    def __str__(self):
+          return f'[Empleado {self._id}, edad {self._nombre}, sexo {self._nacionalidad}, salario {self._fecha_nacimiento}, fecha de nacimiento {self._fecha_nacimiento}]'
 
 
 

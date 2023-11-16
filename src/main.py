@@ -83,7 +83,11 @@ def alta_empleado():
         if cargo == 1 or cargo == 2:  # Piloto o Piloto de reserva
             score = int(input("Ingrese score: "))
             numero_auto = int(input("Ingrese número de auto: "))
-            empleado = Piloto(id_empleado, nombre, nacionalidad, salario, fecha_nacimiento,score, numero_auto)
+            if cargo == 1:
+                empleado = Piloto(id_empleado, nombre, nacionalidad, salario, fecha_nacimiento, score, numero_auto, reserva=False)
+            else:
+                empleado = Piloto(id_empleado, nombre, nacionalidad, salario, 
+                                  fecha_nacimiento, score, numero_auto, reserva=True)
         elif cargo == 3:  # Mecánico
             score = int(input("Ingrese score: "))
             empleado = Mecanico(id_empleado, nombre, fecha_nacimiento, nacionalidad, salario, score)
@@ -148,8 +152,36 @@ def alta_equipo():
     
     
 
+def lista_desde_str(cadena):
+    if len(cadena.strip()) == 0:
+        lista_final = []
+    else:
+        lista_aux = cadena.split(',')
+        lista_final = [x.strip() for x in lista_aux]
+    return lista_final
+
+
 def simular_carrera():
-    pass
+    pilotos_lesionados = input("Ingrese nro de todos pilotos lesionados (enter si no hay): ")
+    pilotos_abandono = input("Ingrese nro de todos pilotos que abandonan (enter si no hay): ")
+    pilotos_error_pits = input("Ingrese nro de todos pilotos con error en pits (enter si no hay): ")
+    pilotos_penalidad = input("Ingrese nro de todos pilotos con penalidad (enter si no hay): ")
+    # Los paso a lista
+    lista_pilotos_lesionados = lista_desde_str(pilotos_lesionados)
+    lista_pilotos_abandono = lista_desde_str(pilotos_abandono)
+    lista_pilotos_error_pits = lista_desde_str(pilotos_error_pits)
+    lista_pilotos_penalidad = lista_desde_str(pilotos_penalidad)
+
+    print(lista_pilotos_lesionados)
+
+
+    carrera = Carrera(equipos_main, lista_pilotos_lesionados, lista_pilotos_abandono, lista_pilotos_error_pits, lista_pilotos_penalidad)
+    simulacion = carrera.simular()
+
+    return simulacion
+
+
+
 
 def top_diez(empleados_main):
     pilotos = [empleado for empleado in empleados_main if isinstance(empleado, Piloto)]
