@@ -14,4 +14,4 @@ La aplicación se basa en la gestión de usuario y simulación de carreras de la
 ## Ejecución
 1. Clonar repositorio de [GitHub](https://github.com/gocolman-uru/Obligatorio_p1) en VSCode
 2. Abrir Terminal
-3. Ejecutar comando: ** python main.py **
+3. Ejecutar comando: **python main.py**
