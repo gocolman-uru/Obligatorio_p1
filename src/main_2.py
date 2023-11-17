@@ -11,6 +11,9 @@ from excepciones.YaExiste import YaExiste
 
 
 def main_menu():
+    ''' Esta función contiene el menú principal de la aplicación, se le solicita al usuario que ingrese un número en base a lo que quiera realizar.
+    Toma ese número y llama a la función que el usuario quiere utilizar.
+    '''
     apagar = False
     while True:
         print("1. Alta de empleado")
@@ -46,12 +49,17 @@ def main_menu():
             print("Opción no válida, intente de nuevo.")
 
 def es_vacio(lista):
+    ''' Chequea si una lista u objeto es vacío, en caso de serlo, devuelve True.
+    '''
     if lista is None:
         return True
     return False   
 
 def alta_empleado():
-
+    ''' Esta función le solicita al usuario la información necesaria para crear un empleado. 
+    En base a las opciones que ingresa se determina si ese empleado es un Piloto (titular o reserva), Director de Equipo o Jefe.
+    Luego de crear el objeto, lo agrega a la lista de empleados.
+    '''
     id_empleado = input("Ingrese cedula: ")
     try: 
         if not id_empleado.isdigit():
@@ -152,6 +160,9 @@ def alta_empleado():
     return empleado
 
 def alta_auto():
+    ''' Esta función le solicita la usuario la información necesaria para crear el objeto Auto.
+    Luego crea el objeto auto y lo agrega a la lista de autos ya existentes.
+    '''
     modelo = input("Ingrese modelo: ")
     try:
         anio = input("Ingrese año: ")
@@ -177,6 +188,8 @@ def alta_auto():
 
 
 def buscar_auto(modelo_auto):
+    '''Esta función recibe el modelo de una auto y lo compara con todos los autos creados.
+    Si encuentra coincidencia, devuelve el objeto auto encontrado, caso contrario devuelve None.'''
     for auto in autos_main:
         if auto.modelo == modelo_auto:
             return auto
@@ -184,6 +197,9 @@ def buscar_auto(modelo_auto):
             return None
 
 def buscar_empleado(cedula): 
+    '''Esta función recibe una cedula y la compara con todos los empleados creados.
+    Si encuentra coincidencia, devuelve el objeto empleado encontrado, caso contrario devuelve None.
+    '''
     for empleado in empleados_main:
         if empleado.id == cedula:
             return empleado
@@ -191,6 +207,9 @@ def buscar_empleado(cedula):
             return None
         
 def buscar_empleado_bool(cedula): 
+    ''' Esta función recibe una cedula y la compara con todos los empleados creados.
+    Si encuentra coincidencia, devuelve True, caso contrario devuelve False.
+    '''
     for empleado in empleados_main:
         if empleado.id == cedula:
             return True
@@ -199,6 +218,8 @@ def buscar_empleado_bool(cedula):
     
 
 def alta_equipo(): 
+    ''' Función recibe listas de pilotos, director de equipo, mecanicos y se le solicita al usuario el modelo de auto
+    para crear un equipo nuevo '''
 
     pilotos = []
     director_equipo = []
@@ -264,6 +285,8 @@ def alta_equipo():
     
 
 def lista_desde_str(cadena):
+    ''' Función auxiliar que crea una lista a partir de un string, utilizando ',' como separador.
+    '''
     if len(cadena.strip()) == 0:
         lista_final = []
     else:
@@ -273,6 +296,9 @@ def lista_desde_str(cadena):
 
 
 def simular_carrera():
+    ''' Esta función le solicita al usuario los datos necesarios para simular la carrera y crea 4 listas con información.
+    Luego instancia Carrera y se utiliza el metodo .simular() para iniciar la simulación.
+    '''
     pilotos_lesionados = input("Ingrese nro de todos pilotos lesionados (enter si no hay): ")
     pilotos_abandono = input("Ingrese nro de todos pilotos que abandonan (enter si no hay): ")
     pilotos_error_pits = input("Ingrese nro de todos pilotos con error en pits (enter si no hay): ")
@@ -291,6 +317,9 @@ def simular_carrera():
 
 
 def buscar_jefe(jefe, equipos_main):
+    ''' La función se encarga de chequear si el nombre dado, coincide con un director de equipo,
+     devuelve el nombre del equipo en caso de encontrarlo, sino retorna None
+    '''
     for equipo in equipos_main:
         if isinstance(equipo, Equipo):
             if equipo.director_de_equipo.nombre == jefe:
@@ -298,6 +327,9 @@ def buscar_jefe(jefe, equipos_main):
     return None
 
 def top_diez(empleados_main):
+    ''' La función crea una lista de pilotos y los ordena en base al puntaje del campeonato de forma descendente.
+    Luego se crea una lista con los primeros 10 y se muestran en pantalla los pilotos ordenados por puntaje.
+    '''
     pilotos = [empleado for empleado in empleados_main if isinstance(empleado, Piloto)]
     pilotos_ordenados = sorted(pilotos, key=lambda piloto: piloto.puntaje_campeonato, reverse=True)
     top_10 = pilotos_ordenados[:10]
@@ -305,6 +337,8 @@ def top_diez(empleados_main):
         print(f"Piloto: {piloto.nombre}, Puntos: {piloto.puntaje_campeonato}")
 
 def resumen_equipos():
+    ''' La función despliega el nombre de los equipos.
+    '''
     equipo = [equipo for equipo in equipos_main if isinstance(equipo, Equipo)]
     i=1
     for team in equipo:
@@ -312,6 +346,9 @@ def resumen_equipos():
         i+=1
 
 def top_cinco_salarios_pilotos():
+    ''' La función crea una lista de pilotos y la ordena en base a su salario de forma descendente.
+    Luego crea una lista con los primeros 5 pilotos y se imprimen en pantalla ordenados por salario.
+    '''
     pilotos = [empleado for empleado in empleados_main if isinstance(empleado, Piloto)]
     pilotos_ordenados = sorted(pilotos, key=lambda piloto: piloto.salario, reverse=True)
     top_10 = pilotos_ordenados[:5]
@@ -319,6 +356,9 @@ def top_cinco_salarios_pilotos():
         print(f"Piloto: {piloto.nombre}, Salario: {piloto.salario}")
 
 def top_tres_score_pilotos():
+    ''' Esta función crea una lista con los pilotos y los ordena por su score de forma descendente.
+    Luego se crea una lista con los primeros 3 pilotos y se imprimen en pantalla.
+    '''
     pilotos = [empleado for empleado in empleados_main if isinstance(empleado, Piloto)]
     pilotos_ordenados = sorted(pilotos, key=lambda piloto: piloto.score, reverse=True)
     top_10 = pilotos_ordenados[:3]
@@ -326,6 +366,9 @@ def top_tres_score_pilotos():
         print(f"Piloto: {piloto.nombre}, Puntos: {piloto.score}")
 
 def jefes_de_equipo(equipos_main):
+    ''' Esta función crea una lista con los Directores de todos los equipos y la ordena alfabéticamente.
+    Luego se imprime en pantalla los directores de equipo y el nombre del equipo
+    '''
     jefes = [jefe for jefe in empleados_main if isinstance(jefe, DirectorEquipo)]
     jefes_ordenados = sorted(jefes, key=lambda jefe: jefe.nombre, reverse=False)
     for jefe in jefes_ordenados:
@@ -335,6 +378,9 @@ def jefes_de_equipo(equipos_main):
 
 
 def realizar_consultas():
+    ''' Esta función despliega el menú para realizar 5 consultas de  estadísticas.
+    Se le solicita al usuario que ingrese una opción y en base a su elección se llaman distintas funciones.
+    '''
     print("1. Top 10 pilotos con más puntos en el campeonato")
     print("2. Resumen campeonato de constructores (equipos).")
     print("3. Top 5 pilotos mejores pago")
