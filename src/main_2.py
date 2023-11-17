@@ -231,7 +231,7 @@ def alta_equipo():
         es_vacio(empleado)
         try:
             if not es_vacio(empleado):
-                if isinstance(empleado,Piloto): #chequear cantidad de pilotos
+                if isinstance(empleado,Piloto): 
                     if empleado.reserva and piloto_reserva<1:
                         pilotos.append(empleado)
                         piloto_reserva+=1
@@ -293,8 +293,8 @@ def simular_carrera():
 def buscar_jefe(jefe, equipos_main):
     for equipo in equipos_main:
         if isinstance(equipo, Equipo):
-            if equipo.get_director_de_equipo.nombre == jefe:
-                return equipo.get_nombre_equipo
+            if equipo.director_de_equipo.nombre == jefe:
+                return equipo.nombre_equipo
     return None
 
 def top_diez(empleados_main):
@@ -308,7 +308,7 @@ def resumen_equipos():
     equipo = [equipo for equipo in equipos_main if isinstance(equipo, Equipo)]
     i=1
     for team in equipo:
-        print(f"Equipo {i}: {team.get_nombre_equipo}")
+        print(f"Equipo {i}: {team.nombre_equipo}")
         i+=1
 
 def top_cinco_salarios_pilotos():

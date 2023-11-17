@@ -9,15 +9,15 @@ class Equipo():
         self._auto = auto
 
     @property
-    def get_nombre_equipo(self):
+    def nombre_equipo(self):
         return self._nombre_equipo
     
     @property
-    def get_piloto(self):
+    def pilotos(self):
         return self._pilotos
     
     @property
-    def get_director_de_equipo(self):
+    def director_de_equipo(self):
         return self._director_de_equipos
     
     @property
