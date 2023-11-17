@@ -21,7 +21,7 @@ class Carrera():
         # Configuro el escenario antes
         # piloto lesionado
         for equipo in self._equipos:
-             for pilotos in equipo.get_piloto:
+             for pilotos in equipo.pilotos:
                 if pilotos.numero_auto in self._pilotos_lesionados:
                     pilotos.lesion = True # ver si es necesario
                     equipos_con_lesion.append(equipo)
@@ -32,7 +32,7 @@ class Carrera():
             pass
         else: 
             for equipo in list(set(equipos_con_lesion)):
-                for pilotos in equipo.get_piloto:
+                for pilotos in equipo.pilotos:
                     if pilotos.reserva == True:
                         pilotos_aptos.append(pilotos)
 
@@ -68,7 +68,7 @@ class Carrera():
             puntaje_auto = int(eq.get_auto.score)
             for meca in eq.get_mecanico:
                 puntaje_mecanicos += int(meca.score)
-            for pilo in eq.get_piloto:
+            for pilo in eq.pilotos:
                 tabla_score_mecanicos[pilo.numero_auto] = puntaje_mecanicos
                 tabla_score_auto[pilo.numero_auto] = puntaje_auto
         # simulo

@@ -159,7 +159,19 @@ def alta_empleado():
         empleado = Mecanico(id_empleado, nombre, nacionalidad, salario, fecha_nacimiento, score)
     elif cargo == 4:  # Jefe de equipo
         empleado = DirectorEquipo(id_empleado, nombre, nacionalidad, salario, fecha_nacimiento)     
+    print('Alta de empleado con exito!\n')
     return empleado
+
+
+def buscar_auto(modelo_auto):
+    '''Esta función recibe el modelo de una auto y lo compara con todos los autos creados.
+    Si encuentra coincidencia, devuelve el objeto auto encontrado, caso contrario devuelve None.'''
+    for auto in autos_main:
+        if auto.modelo == modelo_auto:
+            return auto
+        else:
+            return None
+        
 
 def alta_auto():
     ''' Esta función le solicita la usuario la información necesaria para crear el objeto Auto.
@@ -186,17 +198,10 @@ def alta_auto():
         return None
     auto = Auto(modelo, anio, score)
     autos_main.append(auto)
-    print('Tarea completada con éxito!\n')
+    print('Alta auto completada con éxito!\n')
 
 
-def buscar_auto(modelo_auto):
-    '''Esta función recibe el modelo de una auto y lo compara con todos los autos creados.
-    Si encuentra coincidencia, devuelve el objeto auto encontrado, caso contrario devuelve None.'''
-    for auto in autos_main:
-        if auto.modelo == modelo_auto:
-            return auto
-        else:
-            return None
+
 
 def buscar_empleado(cedula): 
     '''Esta función recibe una cedula y la compara con todos los empleados creados.
@@ -263,7 +268,7 @@ def alta_equipo():
                     else:
                         raise DatosInvalidos()
                 if isinstance(empleado,DirectorEquipo):
-                    if len(director_equipo)<2:
+                    if len(director_equipo)<1:
                         director_equipo.append(empleado)
                     else:
                         raise DatosInvalidos()
@@ -281,7 +286,7 @@ def alta_equipo():
     
     equipo = Equipo(nombre_equipo, pilotos, director_equipo, mecanicos, auto)
     equipos_main.append(equipo)
-    print('Tarea completada con éxito!\n')
+    print('Alta equipo completada con éxito!\n')
     
     
 
@@ -313,6 +318,14 @@ def simular_carrera():
 
     carrera = Carrera(equipos_main, lista_pilotos_lesionados, lista_pilotos_abandono, lista_pilotos_error_pits, lista_pilotos_penalidad)
     simulacion = carrera.simular()
+    # Setteo los puntos conseguidos para las consultas
+    for pilotos_clase in simulacion:
+        for pilo_main in empleados_main:
+            if isinstance(pilo_main,Piloto):
+                if int(pilotos_clase.numero_auto) == int(pilo_main.numero_auto):
+                    pilo_main.puntaje_campeonato = pilotos_clase.puntaje_campeonato
+            else:
+                pass
 
     return simulacion
 
@@ -323,14 +336,19 @@ def buscar_jefe(jefe, equipos_main):
     '''
     for equipo in equipos_main:
         if isinstance(equipo, Equipo):
-            if equipo.director_de_equipo.nombre == jefe:
-                return equipo.nombre_equipo
-    return None
+            for dir in equipo.director_de_equipo:
+                if dir.nombre == jefe:
+                    return equipo.nombre_equipo
+                else:
+                    return None
+        else:
+            return None
 
 def top_diez(empleados_main):
     ''' La función crea una lista de pilotos y los ordena en base al puntaje del campeonato de forma descendente.
     Luego se crea una lista con los primeros 10 y se muestran en pantalla los pilotos ordenados por puntaje.
     '''
+    print()
     pilotos = [empleado for empleado in empleados_main if isinstance(empleado, Piloto)]
     pilotos_ordenados = sorted(pilotos, key=lambda piloto: piloto.puntaje_campeonato, reverse=True)
     top_10 = pilotos_ordenados[:10]
@@ -340,16 +358,27 @@ def top_diez(empleados_main):
 def resumen_equipos():
     ''' La función despliega el nombre de los equipos.
     '''
-    equipo = [equipo for equipo in equipos_main if isinstance(equipo, Equipo)]
-    i=1
-    for team in equipo:
-        print(f"Equipo {i}: {team.nombre_equipo}")
-        i+=1
+    print()
+    dict_aux = {}
+    for eq in equipos_main:
+        suma_puntos = 0
+        for pilotos in eq.pilotos:
+            suma_puntos += pilotos.puntaje_campeonato
+        dict_aux[eq.nombre_equipo] = suma_puntos
+
+    #devolver la lista ordenada
+    dict_ordenado = dict(sorted(dict_aux.items(), key=lambda x: x[1], reverse = True))
+    for k,v in dict_ordenado.items():
+            print(f'Equipo {k}:', f'{v} puntos')
+    print()
+
+    
 
 def top_cinco_salarios_pilotos():
     ''' La función crea una lista de pilotos y la ordena en base a su salario de forma descendente.
     Luego crea una lista con los primeros 5 pilotos y se imprimen en pantalla ordenados por salario.
     '''
+    print()
     pilotos = [empleado for empleado in empleados_main if isinstance(empleado, Piloto)]
     pilotos_ordenados = sorted(pilotos, key=lambda piloto: piloto.salario, reverse=True)
     top_10 = pilotos_ordenados[:5]
@@ -360,28 +389,33 @@ def top_tres_score_pilotos():
     ''' Esta función crea una lista con los pilotos y los ordena por su score de forma descendente.
     Luego se crea una lista con los primeros 3 pilotos y se imprimen en pantalla.
     '''
+    print()
     pilotos = [empleado for empleado in empleados_main if isinstance(empleado, Piloto)]
     pilotos_ordenados = sorted(pilotos, key=lambda piloto: piloto.score, reverse=True)
     top_10 = pilotos_ordenados[:3]
     for piloto in top_10:
         print(f"Piloto: {piloto.nombre}, Puntos: {piloto.score}")
 
-def jefes_de_equipo(equipos_main):
+def jefes_de_equipo(equipos):
     ''' Esta función crea una lista con los Directores de todos los equipos y la ordena alfabéticamente.
     Luego se imprime en pantalla los directores de equipo y el nombre del equipo
     '''
-    jefes = [jefe for jefe in empleados_main if isinstance(jefe, DirectorEquipo)]
-    jefes_ordenados = sorted(jefes, key=lambda jefe: jefe.nombre, reverse=False)
+    print()
+    jefes = [x[0].nombre for x in [x.director_de_equipo for x in equipos_main]]
+    jefes_ordenados = sorted(jefes, reverse=False)
     for jefe in jefes_ordenados:
-        equipo = buscar_jefe(jefe.nombre,equipos_main)
-        if equipo is not None:
-            print(f"Jefe de Equipo: {jefe.nombre} Equipo: {equipo}")
+        for eq in equipos:
+            for dir in eq.director_de_equipo:
+                if jefe == dir.nombre:
+                    print(f"Jefe de Equipo: {jefe} Equipo: {eq.nombre_equipo}")
+
 
 
 def realizar_consultas():
     ''' Esta función despliega el menú para realizar 5 consultas de  estadísticas.
     Se le solicita al usuario que ingrese una opción y en base a su elección se llaman distintas funciones.
     '''
+    print()
     print("1. Top 10 pilotos con más puntos en el campeonato")
     print("2. Resumen campeonato de constructores (equipos).")
     print("3. Top 5 pilotos mejores pago")
@@ -474,7 +508,7 @@ if __name__=='__main__':
         ]
 
     equipos_main = [
-        Equipo('nombre_equipo', 
+        Equipo('nombre_equipo_1', 
                 [
                    Piloto('1', 'uno', 'uruguay', '100', '05/05/06', '99', '101', reserva=False),
                    Piloto('2', 'dos', 'uruguay', '200', '05/05/06', '98', '102', reserva=False),
@@ -492,13 +526,13 @@ if __name__=='__main__':
                    Mecanico('19', 'discinueve', 'uruguay', '5000', '97/97/96' ,'92'),
                 ],
                 Auto('ferrari', '2023', '99')),
-        Equipo('nombre_equipo', 
+        Equipo('nombre_equipo_2', 
                 [
                    Piloto('3', 'tres', 'uruguay', '300', '05/05/06', '97', '103', reserva=False),
                    Piloto('4', 'cuatro', 'uruguay', '400', '05/05/06', '96', '104', reserva=False),
                    Piloto('8', 'ocho', 'uruguay', '900', '05/05/06', '92', '108', reserva=True),
                 ],
-                [DirectorEquipo('47', 'asdsad', 'uruguay', '5000', '97/97/96')], 
+                [DirectorEquipo('47', 'daledos', 'uruguay', '5000', '97/97/96')], 
                 [
                    Mecanico('27', 'asd', 'uruguay', '5000', '97/97/96' ,'84'),
                    Mecanico('28', 'as', 'uruguay', '5000', '97/97/96' ,'83'),
@@ -510,6 +544,81 @@ if __name__=='__main__':
                    Mecanico('34', 'aer', 'uruguay', '5000', '97/97/96', '77'),
                 ],
                 Auto('mustang', '2023', '97')),
+        Equipo('nombre_equipo_3', 
+                [
+                   Piloto('8', 'uno', 'uruguay', '100', '05/05/06', '99', '101', reserva=False),
+                   Piloto('9', 'dos', 'uruguay', '200', '05/05/06', '98', '102', reserva=False),
+                   Piloto('10', 'siete', 'uruguay', '800', '05/05/06', '93', '107', reserva=True),
+                ],
+                [DirectorEquipo('46', 'daletres', 'uruguay', '5000', '97/97/96')], 
+                [
+                   Mecanico('20', 'doce', 'uruguay', '5000', '97/97/96', '99'),
+                   Mecanico('21', 'trece', 'uruguay', '5000', '97/97/96' ,'98'),
+                   Mecanico('22', 'catorce', 'uruguay', '5000', '97/97/96' ,'97'),
+                   Mecanico('23', 'quince', 'uruguay', '5000', '97/97/96' ,'96'),
+                   Mecanico('24', 'diensisces', 'uruguay', '5000', '97/97/96' ,'95'),
+                   Mecanico('25', 'desicisite', 'uruguay', '5000', '97/97/96' ,'94'),
+                   Mecanico('26', 'disciocho', 'uruguay', '5000', '97/97/96' ,'93'),
+                   Mecanico('35', 'discinueve', 'uruguay', '5000', '97/97/96' ,'92'),
+                ],
+                Auto('renault', '2023', '99')),
+
+        Equipo('nombre_equipo_4', 
+                [
+                   Piloto('1', 'uno', 'uruguay', '100', '05/05/06', '99', '101', reserva=False),
+                   Piloto('2', 'dos', 'uruguay', '200', '05/05/06', '98', '102', reserva=False),
+                   Piloto('7', 'siete', 'uruguay', '800', '05/05/06', '93', '107', reserva=True),
+                ],
+                [DirectorEquipo('44', 'dalecuatro', 'uruguay', '5000', '97/97/96')], 
+                [
+                   Mecanico('12', 'doce', 'uruguay', '5000', '97/97/96', '99'),
+                   Mecanico('13', 'trece', 'uruguay', '5000', '97/97/96' ,'98'),
+                   Mecanico('14', 'catorce', 'uruguay', '5000', '97/97/96' ,'97'),
+                   Mecanico('15', 'quince', 'uruguay', '5000', '97/97/96' ,'96'),
+                   Mecanico('16', 'diensisces', 'uruguay', '5000', '97/97/96' ,'95'),
+                   Mecanico('17', 'desicisite', 'uruguay', '5000', '97/97/96' ,'94'),
+                   Mecanico('18', 'disciocho', 'uruguay', '5000', '97/97/96' ,'93'),
+                   Mecanico('19', 'discinueve', 'uruguay', '5000', '97/97/96' ,'92'),
+                ],
+                Auto('ferrari', '2023', '99')),
+
+        Equipo('nombre_equipo_5', 
+                [
+                   Piloto('1', 'uno', 'uruguay', '100', '05/05/06', '99', '101', reserva=False),
+                   Piloto('2', 'dos', 'uruguay', '200', '05/05/06', '98', '102', reserva=False),
+                   Piloto('7', 'siete', 'uruguay', '800', '05/05/06', '93', '107', reserva=True),
+                ],
+                [DirectorEquipo('43', 'dalecinco', 'uruguay', '5000', '97/97/96')], 
+                [
+                   Mecanico('12', 'doce', 'uruguay', '5000', '97/97/96', '99'),
+                   Mecanico('13', 'trece', 'uruguay', '5000', '97/97/96' ,'98'),
+                   Mecanico('14', 'catorce', 'uruguay', '5000', '97/97/96' ,'97'),
+                   Mecanico('15', 'quince', 'uruguay', '5000', '97/97/96' ,'96'),
+                   Mecanico('16', 'diensisces', 'uruguay', '5000', '97/97/96' ,'95'),
+                   Mecanico('17', 'desicisite', 'uruguay', '5000', '97/97/96' ,'94'),
+                   Mecanico('18', 'disciocho', 'uruguay', '5000', '97/97/96' ,'93'),
+                   Mecanico('19', 'discinueve', 'uruguay', '5000', '97/97/96' ,'92'),
+                ],
+                Auto('ferrari', '2023', '99')),
+
+        Equipo('nombre_equipo_6', 
+                [
+                   Piloto('1', 'uno', 'uruguay', '100', '05/05/06', '99', '101', reserva=False),
+                   Piloto('2', 'dos', 'uruguay', '200', '05/05/06', '98', '102', reserva=False),
+                   Piloto('7', 'siete', 'uruguay', '800', '05/05/06', '93', '107', reserva=True),
+                ],
+                [DirectorEquipo('41', 'daleseis', 'uruguay', '5000', '97/97/96')], 
+                [
+                   Mecanico('12', 'doce', 'uruguay', '5000', '97/97/96', '99'),
+                   Mecanico('13', 'trece', 'uruguay', '5000', '97/97/96' ,'98'),
+                   Mecanico('14', 'catorce', 'uruguay', '5000', '97/97/96' ,'97'),
+                   Mecanico('15', 'quince', 'uruguay', '5000', '97/97/96' ,'96'),
+                   Mecanico('16', 'diensisces', 'uruguay', '5000', '97/97/96' ,'95'),
+                   Mecanico('17', 'desicisite', 'uruguay', '5000', '97/97/96' ,'94'),
+                   Mecanico('18', 'disciocho', 'uruguay', '5000', '97/97/96' ,'93'),
+                   Mecanico('19', 'discinueve', 'uruguay', '5000', '97/97/96' ,'92'),
+                ],
+                Auto('ferrari', '2023', '99')),
 
     ] 
 

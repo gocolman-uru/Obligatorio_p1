@@ -24,6 +24,10 @@ class Equipo():
     def get_mecanico(self):
         return self._mecanicos
     
+    @property
+    def get_auto(self):
+        return self._auto
+    
 
     def __str__(self) -> str:
         return f'Equipo: {self._nombre_equipo}, pilotos {self._pilotos}, director de equipo {self._director_de_equipos}, mecanicos {self._mecanicos}, auto {self._auto}]'

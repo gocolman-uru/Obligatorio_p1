@@ -21,3 +21,8 @@ class Auto:
         return self._modelo
     
 
+    @property
+    def score(self):
+        return self._score
+    
+
