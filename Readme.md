@@ -1,7 +1,8 @@
 # Obligatorio P1 2023 
 
 ## Resumen
-La aplicación se basa en la gestión de usuario y simulación de carreras de la Fórmula 1
+La aplicación se basa en la gestión de usuario y simulación de carreras de la Fórmula 1. 
+Además se disponibiliza un menú para consultar estadísticas.
 
 ## Documentación
 [Diagrama](https://drive.google.com/file/d/1CgCftywD4d-Oz8AiDLaBn4n16alo24-V/view?usp=sharing) de clases.
