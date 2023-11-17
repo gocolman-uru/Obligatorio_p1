@@ -52,12 +52,15 @@ def es_vacio(lista):
 
 def alta_empleado():
 
-    id_empleado = input("Ingrese ID: ")
+    id_empleado = input("Ingrese cedula: ")
     try: 
+        if not id_empleado.isdigit():
+            raise DatosInvalidos()
         if len(id_empleado) >= 8:
             raise DatosInvalidos()
         if buscar_empleado_bool(id_empleado):
             raise YaExiste()
+        id_empleado = int(id_empleado)
     except DatosInvalidos as mensaje:
         print(mensaje)
         return None
