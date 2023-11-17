@@ -124,6 +124,8 @@ def alta_empleado():
                 raise DatosInvalidos()
             else:
                 score = int(score)
+                if score > 99 or score<1:
+                    DatosInvalidos()
         except DatosInvalidos as mensaje:
             print(mensaje)
             return None
