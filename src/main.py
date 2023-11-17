@@ -10,7 +10,11 @@ from excepciones.YaExiste import YaExiste
 
 
 
-def main_menu(empleados_main,equipos_main,autos_main,carrera):
+def main_menu():
+    ''' Esta función contiene el menú principal de la aplicación, se le solicita al usuario que ingrese un número en base a lo que quiera realizar.
+    Toma ese número y llama a la función que el usuario quiere utilizar.
+    '''
+    apagar = False
     while True:
         print("1. Alta de empleado")
         print("2. Alta de auto")
@@ -24,9 +28,10 @@ def main_menu(empleados_main,equipos_main,autos_main,carrera):
             print('Ingrese una opcion válida')
         if opcion == 1:
             empleado = alta_empleado()
-            if empleado is None:
-                continue  
-            empleados_main.append(alta_empleado())
+            if empleado == None:
+                pass
+            else:
+                empleados_main.append(empleado)
         elif opcion == 2:
             alta_auto()
         elif opcion == 3: 
@@ -34,7 +39,9 @@ def main_menu(empleados_main,equipos_main,autos_main,carrera):
         elif opcion == 4:
             simular_carrera()
         elif opcion == 5:
-            realizar_consultas()
+            apagar = realizar_consultas()
+            if apagar:
+                break
         elif opcion == 6:
             print("Finalizando programa...")
             break
@@ -42,117 +49,245 @@ def main_menu(empleados_main,equipos_main,autos_main,carrera):
             print("Opción no válida, intente de nuevo.")
 
 def es_vacio(lista):
+    ''' Chequea si una lista u objeto es vacío, en caso de serlo, devuelve True.
+    '''
     if lista is None:
         return True
     return False   
 
 def alta_empleado():
-
-    try:
-        id_empleado = input("Ingrese ID: ")
-        if len(str(id_empleado)) >= 8:
+    ''' Esta función le solicita al usuario la información necesaria para crear un empleado. 
+    En base a las opciones que ingresa se determina si ese empleado es un Piloto (titular o reserva), Director de Equipo o Jefe.
+    Luego de crear el objeto, lo agrega a la lista de empleados.
+    '''
+    id_empleado = input("Ingrese cedula: ")
+    try: 
+        if not id_empleado.isdigit():
             raise DatosInvalidos()
-        
-        if buscar_empleado(id_empleado) is not None:
+        if len(id_empleado) >= 8:
+            raise DatosInvalidos()
+        if buscar_empleado_bool(id_empleado):
             raise YaExiste()
-        
+        id_empleado = int(id_empleado)
+    except DatosInvalidos as mensaje:
+        print(mensaje)
+        return None
+    except YaExiste as mensaje:
+        print(mensaje)
+        return None
+    
+    try:
         nombre = input("Ingrese nombre: ")
         if not nombre.isalpha():
             raise DatosInvalidos()
+    except DatosInvalidos as mensaje:
+        print(mensaje)
+        return None
 
+    try:
         fecha_nacimiento = input("Ingrese fecha de nacimiento (DD/MM/AAAA): ")
         if len(fecha_nacimiento.split("/")) != 3:
             raise DatosInvalidos()
-
+    except DatosInvalidos as mensaje:
+        print(mensaje)
+        return None
+    try:
         nacionalidad = input("Ingrese nacionalidad: ")
         if not nacionalidad.isalpha():
             raise DatosInvalidos()
-        
+    except DatosInvalidos as mensaje:
+        print(mensaje)
+        return None
+    
+    try:
         salario = input("Ingrese salario: ")
-
         if salario.isalpha():
             raise DatosInvalidos()
         else:
             salario = float(salario)
-        
+    except DatosInvalidos as mensaje:
+        print(mensaje)
+        return None
+    
+    try:
         cargo = int(input("Ingrese cargo (1 Piloto, 2 Piloto de reserva, 3 Mecánico, 4 Jefe de equipo): "))
         if cargo > 4:
             raise DatosInvalidos()
-        empleado = None
-
-        if cargo == 1 or cargo == 2:  # Piloto o Piloto de reserva
-            score = int(input("Ingrese score: "))
-            numero_auto = int(input("Ingrese número de auto: "))
-            if cargo == 1:
-                empleado = Piloto(id_empleado, nombre, nacionalidad, salario, fecha_nacimiento, score, numero_auto, reserva=False)
-            else:
-                empleado = Piloto(id_empleado, nombre, nacionalidad, salario, 
-                                  fecha_nacimiento, score, numero_auto, reserva=True)
-        elif cargo == 3:  # Mecánico
-            score = int(input("Ingrese score: "))
-            empleado = Mecanico(id_empleado, nombre, fecha_nacimiento, nacionalidad, salario, score)
-        elif cargo == 4:  # Jefe de equipo
-            empleado = DirectorEquipo(id_empleado, nombre, fecha_nacimiento, salario, nacionalidad)
-        return empleado
-    except (DatosInvalidos,YaExiste):
+    except DatosInvalidos as mensaje:
+        print(mensaje)
         return None
 
+    if cargo == 1 or cargo == 2:  # Piloto o Piloto de reserva
+        try:
+            score = input("Ingrese score: ")
+            if score.isalpha():
+                raise DatosInvalidos()
+            else:
+                score = int(score)
+                if score > 99 or score<1:
+                    DatosInvalidos()
+        except DatosInvalidos as mensaje:
+            print(mensaje)
+            return None
+
+        try:
+            numero_auto = input("Ingrese número de auto: ")
+            if numero_auto.isalpha():
+                raise DatosInvalidos()
+            else:
+                numero_auto = int(numero_auto)
+        except DatosInvalidos as mensaje:
+            print(mensaje)
+            return None
+
+        if cargo == 1:
+            empleado = Piloto(id_empleado, nombre, nacionalidad, salario, fecha_nacimiento, score, numero_auto, reserva=False)
+        else:
+            empleado = Piloto(id_empleado, nombre, nacionalidad, salario, 
+                                fecha_nacimiento, score, numero_auto, reserva=True)
+    elif cargo == 3:  # Mecánico
+
+        try:
+            score = input("Ingrese score: ")
+            if score.isalpha():
+                raise DatosInvalidos()
+            else:
+                score = int(score)
+        except DatosInvalidos as mensaje:
+            print(mensaje)
+            return None
+        empleado = Mecanico(id_empleado, nombre, nacionalidad, salario, fecha_nacimiento, score)
+    elif cargo == 4:  # Jefe de equipo
+        empleado = DirectorEquipo(id_empleado, nombre, nacionalidad, salario, fecha_nacimiento)     
+    return empleado
+
 def alta_auto():
+    ''' Esta función le solicita la usuario la información necesaria para crear el objeto Auto.
+    Luego crea el objeto auto y lo agrega a la lista de autos ya existentes.
+    '''
     modelo = input("Ingrese modelo: ")
-    año = int(input("Ingrese año: "))
-    score = int(input("Ingrese score: "))
-    auto = Auto(modelo, año, score)
+    try:
+        anio = input("Ingrese año: ")
+        if anio.isalpha():
+            raise DatosInvalidos()
+        else:
+            anio = int(anio)
+    except DatosInvalidos as mensaje:
+        print(mensaje)
+        return None
+    try:
+        score = input("Ingrese score: ")
+        if score.isalpha():
+            raise DatosInvalidos()
+        else:
+            score = int(score)
+    except DatosInvalidos as mensaje:
+        print(mensaje)
+        return None
+    auto = Auto(modelo, anio, score)
     autos_main.append(auto)
+    print('Tarea completada con éxito!\n')
 
 
 def buscar_auto(modelo_auto):
+    '''Esta función recibe el modelo de una auto y lo compara con todos los autos creados.
+    Si encuentra coincidencia, devuelve el objeto auto encontrado, caso contrario devuelve None.'''
     for auto in autos_main:
         if auto.modelo == modelo_auto:
-            print(auto.modelo)
+            return auto
         else:
-            print('El modelo ingresado no existe')
+            return None
 
 def buscar_empleado(cedula): 
+    '''Esta función recibe una cedula y la compara con todos los empleados creados.
+    Si encuentra coincidencia, devuelve el objeto empleado encontrado, caso contrario devuelve None.
+    '''
     for empleado in empleados_main:
         if empleado.id == cedula:
             return empleado
+        else: 
+            return None
+        
+def buscar_empleado_bool(cedula): 
+    ''' Esta función recibe una cedula y la compara con todos los empleados creados.
+    Si encuentra coincidencia, devuelve True, caso contrario devuelve False.
+    '''
+    for empleado in empleados_main:
+        if empleado.id == cedula:
+            return True
+        else: 
+            return False
     
 
 def alta_equipo(): 
+    ''' Función recibe listas de pilotos, director de equipo, mecanicos y se le solicita al usuario el modelo de auto
+    para crear un equipo nuevo '''
 
     pilotos = []
     director_equipo = []
     mecanicos = []
-    dato_invalido = False
+    piloto_titular = 0
+    piloto_reserva = 0
+    i=1
     nombre_equipo = input('Ingrese nombre del equipo: ')
     modelo_auto = input('Ingrese modelo de auto:  ')
     auto = buscar_auto(modelo_auto)
-    i=1
+
+    try:
+        if es_vacio(auto):
+            raise DatosInvalidos()
+    except DatosInvalidos as mensaje:
+        print(mensaje)
+        return None
+
     while i <=12:
-        cedula = int(input('Ingrese cedula del empleado: '))
-        empleado = buscar_empleado(cedula)
-        print(empleado)
-        es_vacio(empleado)
-        if not es_vacio(empleado):
-            if isinstance(empleado,Piloto) and not dato_invalido: #chequear cantidad de pilotos
-                pilotos.append(empleado)
-            elif isinstance(empleado,DirectorEquipo) and len(director_equipo)<2:
-                director_equipo.append(empleado)
-            elif isinstance(empleado,Mecanico) and len(mecanicos)<8:
-                mecanicos.append(empleado)
+        cedula = input('Ingrese cedula del empleado: ')
+        try:
+            if cedula.isalpha():
+                raise DatosInvalidos()
             else:
-                dato_invalido = True
-        else:
-            print('Piloto No Existe, ingrese el documento nuevamente: ')
-            i-=1
+                cedula = int(cedula)
+        except DatosInvalidos as mensaje:
+            print(mensaje)
+            return None
+        empleado = buscar_empleado(cedula)
+        try:
+            if not es_vacio(empleado):
+                if isinstance(empleado,Piloto): 
+                    if empleado.reserva and piloto_reserva<1:
+                        pilotos.append(empleado)
+                        piloto_reserva+=1
+                    elif piloto_titular<2:
+                        pilotos.append(empleado) 
+                        piloto_titular+=1
+                    else:
+                        raise DatosInvalidos()
+                if isinstance(empleado,DirectorEquipo):
+                    if len(director_equipo)<2:
+                        director_equipo.append(empleado)
+                    else:
+                        raise DatosInvalidos()
+                if isinstance(empleado,Mecanico):
+                    if len(mecanicos)<8:
+                        mecanicos.append(empleado)
+                    else:
+                        raise DatosInvalidos()
+            else:
+                raise DatosInvalidos()
+        except DatosInvalidos as mensaje:
+            print(mensaje)
+            return None
         i+=1
     
     equipo = Equipo(nombre_equipo, pilotos, director_equipo, mecanicos, auto)
     equipos_main.append(equipo)
+    print('Tarea completada con éxito!\n')
     
     
 
 def lista_desde_str(cadena):
+    ''' Función auxiliar que crea una lista a partir de un string, utilizando ',' como separador.
+    '''
     if len(cadena.strip()) == 0:
         lista_final = []
     else:
@@ -162,6 +297,9 @@ def lista_desde_str(cadena):
 
 
 def simular_carrera():
+    ''' Esta función le solicita al usuario los datos necesarios para simular la carrera y crea 4 listas con información.
+    Luego instancia Carrera y se utiliza el metodo .simular() para iniciar la simulación.
+    '''
     pilotos_lesionados = input("Ingrese nro de todos pilotos lesionados (enter si no hay): ")
     pilotos_abandono = input("Ingrese nro de todos pilotos que abandonan (enter si no hay): ")
     pilotos_error_pits = input("Ingrese nro de todos pilotos con error en pits (enter si no hay): ")
@@ -172,8 +310,6 @@ def simular_carrera():
     lista_pilotos_error_pits = lista_desde_str(pilotos_error_pits)
     lista_pilotos_penalidad = lista_desde_str(pilotos_penalidad)
 
-    print(lista_pilotos_lesionados)
-
 
     carrera = Carrera(equipos_main, lista_pilotos_lesionados, lista_pilotos_abandono, lista_pilotos_error_pits, lista_pilotos_penalidad)
     simulacion = carrera.simular()
@@ -181,9 +317,20 @@ def simular_carrera():
     return simulacion
 
 
-
+def buscar_jefe(jefe, equipos_main):
+    ''' La función se encarga de chequear si el nombre dado, coincide con un director de equipo,
+     devuelve el nombre del equipo en caso de encontrarlo, sino retorna None
+    '''
+    for equipo in equipos_main:
+        if isinstance(equipo, Equipo):
+            if equipo.director_de_equipo.nombre == jefe:
+                return equipo.nombre_equipo
+    return None
 
 def top_diez(empleados_main):
+    ''' La función crea una lista de pilotos y los ordena en base al puntaje del campeonato de forma descendente.
+    Luego se crea una lista con los primeros 10 y se muestran en pantalla los pilotos ordenados por puntaje.
+    '''
     pilotos = [empleado for empleado in empleados_main if isinstance(empleado, Piloto)]
     pilotos_ordenados = sorted(pilotos, key=lambda piloto: piloto.puntaje_campeonato, reverse=True)
     top_10 = pilotos_ordenados[:10]
@@ -191,13 +338,18 @@ def top_diez(empleados_main):
         print(f"Piloto: {piloto.nombre}, Puntos: {piloto.puntaje_campeonato}")
 
 def resumen_equipos():
-    equipos = [equipo for equipo in equipos_main if isinstance(equipo, Equipo)]
+    ''' La función despliega el nombre de los equipos.
+    '''
+    equipo = [equipo for equipo in equipos_main if isinstance(equipo, Equipo)]
     i=1
-    for equipo in equipos:
-        print(f"Equipo {i}: {equipo.get_nombre_equipo}")
+    for team in equipo:
+        print(f"Equipo {i}: {team.nombre_equipo}")
         i+=1
 
 def top_cinco_salarios_pilotos():
+    ''' La función crea una lista de pilotos y la ordena en base a su salario de forma descendente.
+    Luego crea una lista con los primeros 5 pilotos y se imprimen en pantalla ordenados por salario.
+    '''
     pilotos = [empleado for empleado in empleados_main if isinstance(empleado, Piloto)]
     pilotos_ordenados = sorted(pilotos, key=lambda piloto: piloto.salario, reverse=True)
     top_10 = pilotos_ordenados[:5]
@@ -205,20 +357,31 @@ def top_cinco_salarios_pilotos():
         print(f"Piloto: {piloto.nombre}, Salario: {piloto.salario}")
 
 def top_tres_score_pilotos():
+    ''' Esta función crea una lista con los pilotos y los ordena por su score de forma descendente.
+    Luego se crea una lista con los primeros 3 pilotos y se imprimen en pantalla.
+    '''
     pilotos = [empleado for empleado in empleados_main if isinstance(empleado, Piloto)]
     pilotos_ordenados = sorted(pilotos, key=lambda piloto: piloto.score, reverse=True)
     top_10 = pilotos_ordenados[:3]
     for piloto in top_10:
         print(f"Piloto: {piloto.nombre}, Puntos: {piloto.score}")
 
-def jefes_de_equipo():
-    jefes = [(equipo.get_nombre_equipo, equipo.get_director_de_equipo.nombre) for equipo in equipos_main if isinstance(equipo, Equipo)]
-    jefes = sorted(jefes, key=lambda jefe: jefe[1])
-    for (nombre_equipo, director_equipo) in jefes:
-        print(f"Jefe de Equipo: {director_equipo}. Equipo: {nombre_equipo}")
+def jefes_de_equipo(equipos_main):
+    ''' Esta función crea una lista con los Directores de todos los equipos y la ordena alfabéticamente.
+    Luego se imprime en pantalla los directores de equipo y el nombre del equipo
+    '''
+    jefes = [jefe for jefe in empleados_main if isinstance(jefe, DirectorEquipo)]
+    jefes_ordenados = sorted(jefes, key=lambda jefe: jefe.nombre, reverse=False)
+    for jefe in jefes_ordenados:
+        equipo = buscar_jefe(jefe.nombre,equipos_main)
+        if equipo is not None:
+            print(f"Jefe de Equipo: {jefe.nombre} Equipo: {equipo}")
 
 
 def realizar_consultas():
+    ''' Esta función despliega el menú para realizar 5 consultas de  estadísticas.
+    Se le solicita al usuario que ingrese una opción y en base a su elección se llaman distintas funciones.
+    '''
     print("1. Top 10 pilotos con más puntos en el campeonato")
     print("2. Resumen campeonato de constructores (equipos).")
     print("3. Top 5 pilotos mejores pago")
@@ -227,7 +390,12 @@ def realizar_consultas():
     print("6. Para Finalizar")
 
     try:
-        opcion = int(input("Ingrese la opción deseada: "))
+
+        opcion = input("Ingrese la opción deseada: ")
+        if opcion.isalpha():
+            raise DatosInvalidos()
+        else:
+            opcion = int(opcion)
     except:
         print('Ingrese una opcion válida')
 
@@ -240,13 +408,11 @@ def realizar_consultas():
     elif opcion == 4:
         top_tres_score_pilotos()
     elif opcion == 5:
-        jefes_de_equipo()
+        jefes_de_equipo(equipos_main)
     elif opcion == 6:
         print('Finalizando Programa')
     else:
-        return main_menu()
-    
-
+        return True
 
 
 if __name__=='__main__':

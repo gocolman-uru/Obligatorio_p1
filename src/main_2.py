@@ -473,15 +473,6 @@ if __name__=='__main__':
         DirectorEquipo('48', 'asdsad', 'uruguay', '5000', '97/97/96')
         ]
 
-### ver lo de equipos, dos tituilares un suplente DONE
-## ver lo del input en el for de alta equipo al final cuando no lo encuentra
-## cheuear el tema del raise y except en la funcion de alta empleado DONE
-# chequeo en cada input de datos con un try que vuelva al menu o algo, por ejemplo score en piloto DONE
-# metodos to string en empleado y iloto para que me indique que y cuantos pilotos corren DONE
-# hacer los append de las listas main, empleados, equipos main etc.... DONE
-# poner texto en las excepciones para que imprimar el error DONE
-# chequear el setter de lesion, creo que no es necesario por la condicion de la letra DONE
-    
     equipos_main = [
         Equipo('nombre_equipo', 
                 [
@@ -489,7 +480,7 @@ if __name__=='__main__':
                    Piloto('2', 'dos', 'uruguay', '200', '05/05/06', '98', '102', reserva=False),
                    Piloto('7', 'siete', 'uruguay', '800', '05/05/06', '93', '107', reserva=True),
                 ],
-                DirectorEquipo('48', 'asdsad', 'uruguay', '5000', '97/97/96'), 
+                [DirectorEquipo('48', 'asdsad', 'uruguay', '5000', '97/97/96')], 
                 [
                    Mecanico('12', 'doce', 'uruguay', '5000', '97/97/96', '99'),
                    Mecanico('13', 'trece', 'uruguay', '5000', '97/97/96' ,'98'),
@@ -507,7 +498,7 @@ if __name__=='__main__':
                    Piloto('4', 'cuatro', 'uruguay', '400', '05/05/06', '96', '104', reserva=False),
                    Piloto('8', 'ocho', 'uruguay', '900', '05/05/06', '92', '108', reserva=True),
                 ],
-                DirectorEquipo('47', 'asdsad', 'uruguay', '5000', '97/97/96'), 
+                [DirectorEquipo('47', 'asdsad', 'uruguay', '5000', '97/97/96')], 
                 [
                    Mecanico('27', 'asd', 'uruguay', '5000', '97/97/96' ,'84'),
                    Mecanico('28', 'as', 'uruguay', '5000', '97/97/96' ,'83'),
