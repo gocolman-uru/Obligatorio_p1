@@ -251,7 +251,6 @@ def alta_equipo():
             print(mensaje)
             return None
         empleado = buscar_empleado(cedula)
-        es_vacio(empleado)
         try:
             if not es_vacio(empleado):
                 if isinstance(empleado,Piloto): 
