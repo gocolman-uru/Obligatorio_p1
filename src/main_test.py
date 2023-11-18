@@ -15,7 +15,7 @@ def main_menu():
     Toma ese número y llama a la función que el usuario quiere utilizar.
     '''
     apagar = False
-    while True:
+    while True: 
         print("1. Alta de empleado")
         print("2. Alta de auto")
         print("3. Alta de equipo")
@@ -37,7 +37,7 @@ def main_menu():
         elif opcion == 3: 
             alta_equipo()
         elif opcion == 4:
-            simular_carrera()
+            simu = simular_carrera(equipos_main)
         elif opcion == 5:
             apagar = realizar_consultas()
             if apagar:
@@ -124,7 +124,7 @@ def alta_empleado():
                 raise DatosInvalidos()
             else:
                 score = int(score)
-                if score > 99 or score<1:
+                if score >= 1 or score <= 99:
                     DatosInvalidos()
         except DatosInvalidos as mensaje:
             print(mensaje)
@@ -301,7 +301,7 @@ def lista_desde_str(cadena):
     return lista_final
 
 
-def simular_carrera():
+def simular_carrera(eq):
     ''' Esta función le solicita al usuario los datos necesarios para simular la carrera y crea 4 listas con información.
     Luego instancia Carrera y se utiliza el metodo .simular() para iniciar la simulación.
     '''
@@ -316,7 +316,7 @@ def simular_carrera():
     lista_pilotos_penalidad = lista_desde_str(pilotos_penalidad)
 
 
-    carrera = Carrera(equipos_main, lista_pilotos_lesionados, lista_pilotos_abandono, lista_pilotos_error_pits, lista_pilotos_penalidad)
+    carrera = Carrera(eq, lista_pilotos_lesionados, lista_pilotos_abandono, lista_pilotos_error_pits, lista_pilotos_penalidad)
     simulacion = carrera.simular()
     # Setteo los puntos conseguidos para las consultas
     for pilotos_clase in simulacion:
@@ -372,7 +372,7 @@ def resumen_equipos():
             print(f'Equipo {k}:', f'{v} puntos')
     print()
 
-    
+
 
 def top_cinco_salarios_pilotos():
     ''' La función crea una lista de pilotos y la ordena en base a su salario de forma descendente.
@@ -460,12 +460,22 @@ if __name__=='__main__':
         Piloto('4', 'cuatro', 'uruguay', '400', '05/05/06', '96', '104', reserva=False),
         Piloto('5', 'cinco', 'uruguay', '600', '05/05/06', '95', '105', reserva=False),
         Piloto('6', 'seis', 'uruguay', '700', '05/05/06', '94', '106', reserva=False),
+        Piloto('111', 'unonuo', 'uruguay', '100', '05/05/06', '99', '10111', reserva=False),
+        Piloto('222', 'dosdos', 'uruguay', '200', '05/05/06', '98', '10222', reserva=False),
+        Piloto('333', 'trestres', 'uruguay', '300', '05/05/06', '97', '10333', reserva=False),
+        Piloto('444', 'cuatrocuatro', 'uruguay', '400', '05/05/06', '96', '10444', reserva=False),
+        Piloto('555', 'cincocinco', 'uruguay', '600', '05/05/06', '95', '10555', reserva=False),
+        Piloto('666', 'seisseis', 'uruguay', '700', '05/05/06', '94', '10666', reserva=False),
+        Piloto('1111', 'daledale', 'uruguay', '100', '05/05/06', '99', '101111', reserva=False),
+        Piloto('2222', 'daledale2', 'uruguay', '200', '05/05/06', '98', '102222', reserva=False),
+                   
         #reserva
         Piloto('7', 'siete', 'uruguay', '800', '05/05/06', '93', '107', reserva=True),
         Piloto('8', 'ocho', 'uruguay', '900', '05/05/06', '92', '108', reserva=True),
         Piloto('9', 'nueve', 'uruguay', '1000', '05/05/06', '91', '109', reserva=True),
-        Piloto('10', 'diez', 'uruguay', '11000', '05/05/06', '90', '110', reserva=True),
-        Piloto('11', 'once', 'uruguay', '12000', '05/05/06', '89', '111', reserva=True),
+        Piloto('10', 'diez', 'uruguay', '11000', '05/05/06', '90', '1010', reserva=True),
+        Piloto('11', 'once', 'uruguay', '12000', '05/05/06', '89', '1011', reserva=True),
+        Piloto('12', 'doce', 'uruguay', '800', '05/05/06', '93', '1012', reserva=True),
         #mecanicos
         Mecanico('12', 'doce', 'uruguay', '5000', '97/97/96', '99'),
         Mecanico('13', 'trece', 'uruguay', '5000', '97/97/96', '98'),
@@ -546,9 +556,9 @@ if __name__=='__main__':
                 Auto('mustang', '2023', '97')),
         Equipo('nombre_equipo_3', 
                 [
-                   Piloto('8', 'uno', 'uruguay', '100', '05/05/06', '99', '101', reserva=False),
-                   Piloto('9', 'dos', 'uruguay', '200', '05/05/06', '98', '102', reserva=False),
-                   Piloto('10', 'siete', 'uruguay', '800', '05/05/06', '93', '107', reserva=True),
+                   Piloto('111', 'unonuo', 'uruguay', '100', '05/05/06', '99', '10111', reserva=False),
+                   Piloto('222', 'dosdos', 'uruguay', '200', '05/05/06', '98', '10222', reserva=False),
+                   Piloto('9', 'nueve', 'uruguay', '800', '05/05/06', '93', '109', reserva=True),
                 ],
                 [DirectorEquipo('46', 'daletres', 'uruguay', '5000', '97/97/96')], 
                 [
@@ -565,9 +575,9 @@ if __name__=='__main__':
 
         Equipo('nombre_equipo_4', 
                 [
-                   Piloto('1', 'uno', 'uruguay', '100', '05/05/06', '99', '101', reserva=False),
-                   Piloto('2', 'dos', 'uruguay', '200', '05/05/06', '98', '102', reserva=False),
-                   Piloto('7', 'siete', 'uruguay', '800', '05/05/06', '93', '107', reserva=True),
+                   Piloto('333', 'trestres', 'uruguay', '100', '05/05/06', '99', '10333', reserva=False),
+                   Piloto('444', 'cuatrocuatro', 'uruguay', '200', '05/05/06', '98', '10444', reserva=False),
+                   Piloto('10', 'diez', 'uruguay', '800', '05/05/06', '93', '1010', reserva=True),
                 ],
                 [DirectorEquipo('44', 'dalecuatro', 'uruguay', '5000', '97/97/96')], 
                 [
@@ -584,9 +594,9 @@ if __name__=='__main__':
 
         Equipo('nombre_equipo_5', 
                 [
-                   Piloto('1', 'uno', 'uruguay', '100', '05/05/06', '99', '101', reserva=False),
-                   Piloto('2', 'dos', 'uruguay', '200', '05/05/06', '98', '102', reserva=False),
-                   Piloto('7', 'siete', 'uruguay', '800', '05/05/06', '93', '107', reserva=True),
+                   Piloto('555', 'cincocinco', 'uruguay', '100', '05/05/06', '99', '10555', reserva=False),
+                   Piloto('666', 'seisseis', 'uruguay', '200', '05/05/06', '98', '10666', reserva=False),
+                   Piloto('11', 'once', 'uruguay', '800', '05/05/06', '93', '1011', reserva=True),
                 ],
                 [DirectorEquipo('43', 'dalecinco', 'uruguay', '5000', '97/97/96')], 
                 [
@@ -603,9 +613,9 @@ if __name__=='__main__':
 
         Equipo('nombre_equipo_6', 
                 [
-                   Piloto('1', 'uno', 'uruguay', '100', '05/05/06', '99', '101', reserva=False),
-                   Piloto('2', 'dos', 'uruguay', '200', '05/05/06', '98', '102', reserva=False),
-                   Piloto('7', 'siete', 'uruguay', '800', '05/05/06', '93', '107', reserva=True),
+                   Piloto('1111', 'daledale', 'uruguay', '100', '05/05/06', '99', '101111', reserva=False),
+                   Piloto('2222', 'daledale2', 'uruguay', '200', '05/05/06', '98', '102222', reserva=False),
+                   Piloto('12', 'doce', 'uruguay', '800', '05/05/06', '93', '1012', reserva=True),
                 ],
                 [DirectorEquipo('41', 'daleseis', 'uruguay', '5000', '97/97/96')], 
                 [

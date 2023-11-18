@@ -62,6 +62,7 @@ class Carrera():
             else:
                 tabla_penalidades[piloto.numero_auto] = 0
 
+
         # Calculo de score del equipo 
         for eq in self._equipos:
             puntaje_mecanicos = 0
@@ -95,16 +96,15 @@ class Carrera():
                 tabla_final_para_puntos[i] = 0
             contador += 1
 
+
         for pilotos_clase in pilotos_aptos:
             for k,v in tabla_final_para_puntos.items():
                 if int(pilotos_clase.numero_auto) == int(k):
                     pilotos_clase.puntaje_campeonato = pilotos_clase.puntaje_campeonato + v
         
-        print('*' * 100)
-        print('Resultados de la carrera:')
-        print()
-        for k,v in tabla_posiciones_dict.items():
+        for k,v in dict_final_posiciones_con_puntos.items():
             print(f'Pos. {k}:', f'Auto nro {v}')
+            contador += 1
         print()
         print('Puntajes totales de los pilotos:')
         for piloto in pilotos_aptos:
@@ -112,4 +112,5 @@ class Carrera():
         print('*' * 100)
 
         return pilotos_aptos
-
+    
+    

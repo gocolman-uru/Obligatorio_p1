@@ -15,7 +15,7 @@ def main_menu():
     Toma ese número y llama a la función que el usuario quiere utilizar.
     '''
     apagar = False
-    while True:
+    while True: 
         print("1. Alta de empleado")
         print("2. Alta de auto")
         print("3. Alta de equipo")
@@ -37,7 +37,7 @@ def main_menu():
         elif opcion == 3: 
             alta_equipo()
         elif opcion == 4:
-            simular_carrera()
+            simu = simular_carrera(equipos_main)
         elif opcion == 5:
             apagar = realizar_consultas()
             if apagar:
@@ -124,7 +124,7 @@ def alta_empleado():
                 raise DatosInvalidos()
             else:
                 score = int(score)
-                if score > 99 or score<1:
+                if score >= 1 or score <= 99:
                     DatosInvalidos()
         except DatosInvalidos as mensaje:
             print(mensaje)
@@ -301,7 +301,7 @@ def lista_desde_str(cadena):
     return lista_final
 
 
-def simular_carrera():
+def simular_carrera(eq):
     ''' Esta función le solicita al usuario los datos necesarios para simular la carrera y crea 4 listas con información.
     Luego instancia Carrera y se utiliza el metodo .simular() para iniciar la simulación.
     '''
@@ -316,7 +316,7 @@ def simular_carrera():
     lista_pilotos_penalidad = lista_desde_str(pilotos_penalidad)
 
 
-    carrera = Carrera(equipos_main, lista_pilotos_lesionados, lista_pilotos_abandono, lista_pilotos_error_pits, lista_pilotos_penalidad)
+    carrera = Carrera(eq, lista_pilotos_lesionados, lista_pilotos_abandono, lista_pilotos_error_pits, lista_pilotos_penalidad)
     simulacion = carrera.simular()
     # Setteo los puntos conseguidos para las consultas
     for pilotos_clase in simulacion:
@@ -372,7 +372,7 @@ def resumen_equipos():
             print(f'Equipo {k}:', f'{v} puntos')
     print()
 
-    
+
 
 def top_cinco_salarios_pilotos():
     ''' La función crea una lista de pilotos y la ordena en base a su salario de forma descendente.
