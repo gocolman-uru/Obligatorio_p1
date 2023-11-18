@@ -245,7 +245,7 @@ def alta_equipo():
         print(mensaje)
         return None
 
-    while i <=12:
+    while True:
         cedula = input('Ingrese cedula del empleado: ')
         try:
             if cedula.isalpha():
@@ -272,16 +272,20 @@ def alta_equipo():
                         director_equipo.append(empleado)
                     else:
                         raise DatosInvalidos()
+                        
                 if isinstance(empleado,Mecanico):
-                    if len(mecanicos)<8:
-                        mecanicos.append(empleado)
-                    else:
-                        raise DatosInvalidos()
+                    mecanicos.append(empleado)
+                else:
+                    raise DatosInvalidos()
             else:
                 raise DatosInvalidos()
+                
+            if len(mecanicos)>7 and len(pilotos)==3 and len(director_equipo)==1:
+                break
         except DatosInvalidos as mensaje:
             print(mensaje)
             return None
+            
         i+=1
     
     equipo = Equipo(nombre_equipo, pilotos, director_equipo, mecanicos, auto)
@@ -447,8 +451,6 @@ def realizar_consultas():
         print('Finalizando Programa')
     else:
         return True
-    
-    
 
 
 if __name__=='__main__':
